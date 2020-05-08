@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    android:weightSum="4"
+    tools:context=".ui.totalstats.TotalStatsFragment">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/totalstats_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/totalstats_piechart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

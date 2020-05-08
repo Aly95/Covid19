@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_totalstats"
+        android:icon="@drawable/ic_earth"
+        android:title="@string/total_stats_Text" />
+    <item
+        android:id="@+id/menu_regionstats"
+        android:icon="@drawable/ic_region"
+        android:title="@string/region_stats_Text" />
+    <item
+        android:id="@+id/menu_covidmap"
+        android:icon="@drawable/ic_map"
+        android:title="@string/covid_map_Text" />
+</menu>
