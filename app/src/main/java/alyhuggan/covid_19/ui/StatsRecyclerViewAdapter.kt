@@ -2,6 +2,9 @@ package alyhuggan.covid_19.ui
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.Stats
+import android.content.ContentResolver
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +13,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.items_stats.view.*
+
+private const val TAG = "StatRecyclerViewAdapt"
 
 class StatsViewHolder(view: View): RecyclerView.ViewHolder(view) {
     val title: TextView = view.stats_title
@@ -41,15 +46,45 @@ class StatsRecyclerViewAdapter(private val statList: List<Stats>): RecyclerView.
         } else {
             val statItem = statList[position]
             title.text = statItem.title
-            updated.text = statItem.updated
-            cases.text = statItem.cases.toString()
+            updated.text = "Last Updated: ${statItem.updated}"
+            cases.text = statItem.cases
 
-            Picasso.get().load("https://www.worldometers.info/img/flags/ch-flag.gif")
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .centerInside()
-                .resize(140, 140)
-                .into(icon)
+            if(statItem.icon != null) {
+                cases.setTextColor(Color.BLUE)
+                Picasso.get().load(statItem.icon)
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .centerInside()
+                    .resize(140, 140)
+                    .into(icon)
+            } else {
+                var totalIcon: Int = 0
+
+                when (statItem.title) {
+                    "Total Confirmed Cases" -> {
+                        totalIcon = R.drawable.ic_globe
+                        cases.setTextColor(Color.BLUE)
+                    }
+                    "Currently Infected" -> {
+                        totalIcon = R.drawable.ic_virus
+                        cases.setTextColor(Color.RED)
+                    }
+                    "Recovered" -> {
+                        totalIcon = R.drawable.ic_heart
+                        cases.setTextColor(Color.GREEN)
+                    }
+                    "Deaths" -> {
+                        Log.d(TAG, "Skull")
+                        totalIcon = R.drawable.ic_skull
+                        cases.setTextColor(Color.GRAY)
+                    }
+                }
+                Picasso.get().load(totalIcon)
+                    .error(R.drawable.placeholder)
+                    .centerInside()
+                    .resize(140, 140)
+                    .into(icon)
+            }
         }
     }
 }

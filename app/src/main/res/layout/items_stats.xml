@@ -9,7 +9,9 @@
         android:id="@+id/stats_cardview"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,14 +32,14 @@
                     android:id="@+id/stats_icon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
+                    android:layout_gravity="center|end"
                     android:layout_weight="1"
                     android:scaleType="fitCenter" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="2.5"
                     android:orientation="vertical"
                     android:weightSum="10">
 
@@ -59,6 +61,8 @@
                         android:layout_weight="4.2"
                         android:fontFamily="@font/open_sans_light"
                         android:paddingLeft="4dp"
+                        android:paddingTop="4dp"
+                        android:textSize="12sp"
                         tools:text="@string/stats_updated_Text" />
                 </LinearLayout>
 
@@ -66,9 +70,12 @@
                     android:id="@+id/stats_cases"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:fontFamily="@font/open_sans"
-                    android:padding="12dp"
+                    android:gravity="center|end"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:text="@string/stats_cases_Text" />
             </LinearLayout>
         </FrameLayout>

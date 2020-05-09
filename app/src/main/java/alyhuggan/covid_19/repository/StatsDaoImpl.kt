@@ -1,26 +1,115 @@
 package alyhuggan.covid_19.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 private const val TAG = "StatsDaoImpl"
 
-class StatsDaoImpl: StatsDao {
+class StatsDaoImpl : StatsDao {
 
     private val statList = mutableListOf<Stats>()
+    private val countryStatList = mutableListOf<Stats>()
     private val stats = MutableLiveData<List<Stats>>()
-    private val countryStats = MutableLiveData<Stats>()
+    private val countryStats = MutableLiveData<List<Stats>>()
 
     init {
-        statList.add(Stats("Total Confirmed Cases", "Last Updated: May, 07 2020, 12:27, UTC", 10000, "Icon =:"))
-        statList.add(Stats("Currently Infected", "Last Updated: May, 07 2020, 12:27, UTC", 8000, "Icon =:"))
-        statList.add(Stats("Recovered", "Last Updated: May, 07 2020, 12:27, UTC", 2000, "Icon =:"))
-        statList.add(Stats("Deaths", "Last Updated: May, 07 2020, 12:27, UTC", 500, "Icon =:"))
         stats.value = statList
+        countryStats.value = countryStatList
+        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")
+        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search")
     }
 
-    override fun getStats(): LiveData<List<Stats>> = stats
+    override fun getStats() = stats as LiveData<List<Stats>>
 
-    override fun getCountryStats(): LiveData<Stats> = countryStats
+    override fun getCountryStats() = countryStats as LiveData<List<Stats>>
+
+    /*
+    Retrieves JSON data from given URL and passes it to the respective function to be be parsed
+     */
+    private fun getJsonData(url: String) {
+
+        val general = "https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats"
+        val country = "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search"
+        val request = Request.Builder().url(url).build()
+        val client = OkHttpClient()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                when (url) {
+                    general -> {
+                        parseGeneralJsonData(body)
+                    }
+                    country -> {
+                        parseCountryJsonData(body)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d(TAG, "onFailure: Failed, exception $e")
+            }
+        })
+    }
+
+    private fun parseGeneralJsonData(body: String?) {
+
+            var titleArray = mutableListOf<Pair<String, String>>()
+            val total = Pair("Total Confirmed Cases", "total_cases")
+            val current = Pair("Currently Infected", "currently_infected")
+            val recovered = Pair("Recovered", "recovery_cases")
+            val deaths = Pair("Deaths", "death_cases")
+            titleArray.add(total)
+            titleArray.add(current)
+            titleArray.add(recovered)
+            titleArray.add(deaths)
+
+            val jsonData = JSONObject(body)
+            val data = jsonData.getJSONObject("data")
+            val updated = data.getString("last_update")
+
+            for (i in 0 until titleArray.size) {
+
+                val stat = titleArray[i]
+
+                statList.add(
+                    Stats(
+                        stat.first,
+                        updated,
+                        data.getString(stat.second),
+                        null
+                    )
+                )
+                Log.d(TAG, "${stats.value}")
+            }
+            stats.postValue(statList)
+    }
+
+    private fun parseCountryJsonData(body: String?) {
+
+        val jsonData = JSONObject(body)
+        val data = jsonData.getJSONObject("data")
+        val countryObject = data.getJSONArray("rows")
+        val new = countryObject.getJSONObject(0)
+        val updated = data.getString("last_update")
+
+        for(i in 1 until countryObject.length()) {
+
+            val stat = countryObject.getJSONObject(i)
+
+            countryStatList.add(
+                Stats(
+                    stat.get("country") as String,
+                    updated,
+                    stat.get("total_cases") as String,
+                    stat.get("flag") as String
+                )
+            )
+        }
+    }
 
 }

@@ -8,15 +8,19 @@ import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -50,10 +54,14 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
     private fun initializeUi() {
 
         val statList = ArrayList<Stats>()
-        val viewModel =
-            ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
+
+//        val viewModel = ViewModelProviders.of(this, viewModelFactory)
+//            .get(TotalStatsViewModel::class.java)
+
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
 
         viewModel.getStats().observe(viewLifecycleOwner, Observer { stats ->
+            Log.d(TAG, "Stats = $stats")
             stats.forEach { stat ->
                 statList.add(stat)
             }
@@ -72,10 +80,13 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         totalstats_recyclerview.layoutManager = LinearLayoutManager(context)
         totalstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList)
         totalstats_recyclerview.setHasFixedSize(true)
-//        val resId = R.anim.layout_animation_fall_down
-//        val animation: LayoutAnimationController =
-//            AnimationUtils.loadLayoutAnimation(context, resId)
-//        activityblog_RV.layoutAnimation = animation
+        animate()
+    }
+
+    private fun animate() {
+        val resId = R.anim.animation_fall_down
+        val animation: LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, resId)
+        totalstats_recyclerview.layoutAnimation = animation
     }
 
     private fun updatePieChart(statList: ArrayList<Stats>) {
@@ -83,25 +94,41 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         val pieChart = view!!.findViewById<PieChart>(R.id.totalstats_piechart)
         val xValues = ArrayList<PieEntry>()
         var stat: Stats
+        var casesReplace: String
+
+        val colors = ArrayList<Int>()
+        colors.add(Color.RED)
+        colors.add(Color.GREEN)
+        colors.add(Color.GRAY)
 
         for (i in 1 until statList.size) {
             stat = statList[i]
-            xValues.add(PieEntry(stat.cases.toFloat(), stat.title))
+            casesReplace = stat.cases.replace(",", "")
+            xValues.add(PieEntry(casesReplace.toFloat(), stat.title))
         }
 
         val dataSet = PieDataSet(xValues, "")
-        dataSet.valueLinePart1OffsetPercentage = 200f
-        dataSet.valueLinePart1Length = 0.1f
-        dataSet.valueLinePart2Length = 0.5f
-
+        dataSet.colors = colors
+        dataSet.valueTextColor = Color.WHITE
         val data = PieData(dataSet)
         data.setValueTextSize(8f)
-
-        pieChart.setUsePercentValues(true)
         data.setValueFormatter(PercentFormatter())
 
-        pieChart.data = data
+        val l = pieChart.legend
+        l.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
+        l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        l.textColor = Color.WHITE
+        l.orientation = Legend.LegendOrientation.VERTICAL
+        l.textSize = 15f
 
+        pieChart.description.isEnabled = false
+        pieChart.setUsePercentValues(true)
+        pieChart.setDrawEntryLabels(false)
+        pieChart.setHoleColor(Color.TRANSPARENT)
+//        pieChart.centerText = "Covid-19"
+
+        pieChart.data = data
+        pieChart.invalidate()
     }
 
 }
