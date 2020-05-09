@@ -1,6 +1,6 @@
-package alyhuggan.covid_19
+package alyhuggan.covid_19.repository
 
-import alyhuggan.covid_19.repository.StatsDao
+import alyhuggan.covid_19.repository.stats.StatsDao
 import alyhuggan.covid_19.repository.database.Database
 import alyhuggan.covid_19.repository.database.DatabaseImpl
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory

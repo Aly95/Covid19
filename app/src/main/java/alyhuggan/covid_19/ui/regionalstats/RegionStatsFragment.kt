@@ -1,8 +1,8 @@
 package alyhuggan.covid_19.ui.regionalstats
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.Stats
-import alyhuggan.covid_19.ui.BaseFragment
+import alyhuggan.covid_19.repository.stats.Stats
+import alyhuggan.covid_19.ui.generic.BaseFragment
 import alyhuggan.covid_19.ui.StatsRecyclerViewAdapter
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
@@ -14,18 +14,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_region_stats.*
-import kotlinx.android.synthetic.main.fragment_total_stats.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
@@ -51,6 +48,7 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         initializeUi()
     }
 
+
     private fun initializeUi() {
 
         val statList = ArrayList<Stats>()
@@ -68,14 +66,14 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
 
     override fun activateToolbar() {
         val toolbar = activity!!.findViewById<Toolbar>(R.id.main_toolbar)
-        toolbar.title = "Total Stats"
-        toolbar.setTitleTextColor(Color.WHITE)
+        toolbar.title = "Regional Stats"
     }
 
     private fun updateRecyclerView(statList: ArrayList<Stats>) {
         regionstats_recyclerview.layoutManager = LinearLayoutManager(context)
-        regionstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList)
+        regionstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList, parentFragmentManager)
         regionstats_recyclerview.setHasFixedSize(true)
+
         animate()
     }
 
@@ -84,5 +82,17 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         val animation: LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, resId)
         regionstats_recyclerview.layoutAnimation = animation
     }
+
+//    fun bottomSheet() {
+//        val dialog = BottomSheetDialogFragment()
+//        val view = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
+//        val close = view.findViewById<ImageView>(R.id.bottomsheet_close)
+//        close.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//        dialog.setCancelable(false)
+//        dialog.setContentView(view)
+//        dialog.show(this.FragmentManager, "Yes")
+//    }
 
 }

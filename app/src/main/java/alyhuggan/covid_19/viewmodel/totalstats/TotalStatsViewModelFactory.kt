@@ -1,6 +1,6 @@
 package alyhuggan.covid_19.viewmodel.totalstats
 
-import alyhuggan.covid_19.repository.StatsDao
+import alyhuggan.covid_19.repository.stats.StatsDao
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 

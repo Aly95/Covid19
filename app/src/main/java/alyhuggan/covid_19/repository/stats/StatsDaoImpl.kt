@@ -1,4 +1,4 @@
-package alyhuggan.covid_19.repository
+package alyhuggan.covid_19.repository.stats
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -15,6 +15,7 @@ class StatsDaoImpl : StatsDao {
     private val countryStatList = mutableListOf<Stats>()
     private val stats = MutableLiveData<List<Stats>>()
     private val countryStats = MutableLiveData<List<Stats>>()
+    private val individualStat = MutableLiveData<CountryStat>()
 
     init {
         stats.value = statList
@@ -24,8 +25,8 @@ class StatsDaoImpl : StatsDao {
     }
 
     override fun getStats() = stats as LiveData<List<Stats>>
-
     override fun getCountryStats() = countryStats as LiveData<List<Stats>>
+    override fun getIndividualStat() = individualStat as LiveData<CountryStat>
 
     /*
     Retrieves JSON data from given URL and passes it to the respective function to be be parsed
@@ -94,7 +95,6 @@ class StatsDaoImpl : StatsDao {
         val jsonData = JSONObject(body)
         val data = jsonData.getJSONObject("data")
         val countryObject = data.getJSONArray("rows")
-        val new = countryObject.getJSONObject(0)
         val updated = data.getString("last_update")
 
         for(i in 1 until countryObject.length()) {
@@ -112,4 +112,28 @@ class StatsDaoImpl : StatsDao {
         }
     }
 
+    private fun parseIndividualJsonData(body: String?, country: String) {
+
+        val jsonData = JSONObject(body)
+        val data = jsonData.getJSONObject("data")
+        val countryObject = data.getJSONArray("rows")
+
+        for (i in 1 until countryObject.length()) {
+
+            val stat = countryObject.getJSONObject(i)
+
+            if (stat.get("country") == country) {
+                Log.d(TAG, "Individual Country here")
+                individualStat.value =
+                    CountryStat(
+                        stat.get("country") as String,
+                        stat.get("total_cases") as String,
+                        stat.get("active_cases") as String,
+                        stat.get("total_recovered") as String,
+                        stat.get("total_deaths") as String,
+                        stat.get("flag") as String
+                    )
+            }
+        }
+    }
 }

@@ -1,8 +1,8 @@
 package alyhuggan.covid_19.ui.totalstats
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.Stats
-import alyhuggan.covid_19.ui.BaseFragment
+import alyhuggan.covid_19.repository.stats.Stats
+import alyhuggan.covid_19.ui.generic.BaseFragment
 import alyhuggan.covid_19.ui.StatsRecyclerViewAdapter
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
@@ -17,7 +17,6 @@ import android.view.animation.LayoutAnimationController
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -78,7 +77,7 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
 
     private fun updateRecyclerView(statList: ArrayList<Stats>) {
         totalstats_recyclerview.layoutManager = LinearLayoutManager(context)
-        totalstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList)
+        totalstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList, parentFragmentManager)
         totalstats_recyclerview.setHasFixedSize(true)
         animate()
     }

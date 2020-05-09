@@ -1,4 +1,4 @@
-package alyhuggan.covid_19.ui
+package alyhuggan.covid_19.ui.generic
 
 import alyhuggan.covid_19.R
 import android.graphics.Color
