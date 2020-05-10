@@ -11,31 +11,41 @@ private const val TAG = "StatsDaoImpl"
 
 class StatsDaoImpl : StatsDao {
 
-    private val statList = mutableListOf<Stats>()
-    private val countryStatList = mutableListOf<Stats>()
+    //LiveData variables
     private val stats = MutableLiveData<List<Stats>>()
     private val countryStats = MutableLiveData<List<Stats>>()
-    private val individualStat = MutableLiveData<CountryStat>()
+    private val individualStat = MutableLiveData<List<BottomSheetStats>>()
+    //Mutable variables the LiveData variables have their values set to
+    private val statList = mutableListOf<Stats>()
+    private val countryStatList = mutableListOf<Stats>()
+    private var individualCountryStat = mutableListOf<BottomSheetStats>()
 
     init {
         stats.value = statList
         countryStats.value = countryStatList
-        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")
-        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search")
+        individualStat.value = individualCountryStat
+        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats", null)
+        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search", null)
     }
 
     override fun getStats() = stats as LiveData<List<Stats>>
     override fun getCountryStats() = countryStats as LiveData<List<Stats>>
-    override fun getIndividualStat() = individualStat as LiveData<CountryStat>
+    override fun getIndividualStat(country: String): LiveData<List<BottomSheetStats>> {
+        getJsonData("https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search ", country)
+        return individualStat
+    }
+
+//    private fun retrieveCountryName(url: String) = url.substringAfter(" ")
 
     /*
     Retrieves JSON data from given URL and passes it to the respective function to be be parsed
      */
-    private fun getJsonData(url: String) {
+    private fun getJsonData(url: String, countryName: String?) {
 
         val general = "https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats"
         val country = "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search"
-        val request = Request.Builder().url(url).build()
+
+        val request = Request.Builder().url(url.trim()).build()
         val client = OkHttpClient()
 
         client.newCall(request).enqueue(object : Callback {
@@ -47,6 +57,9 @@ class StatsDaoImpl : StatsDao {
                     }
                     country -> {
                         parseCountryJsonData(body)
+                    }
+                    else -> {
+                        parseIndividualJsonData(body, countryName!!)
                     }
                 }
             }
@@ -110,9 +123,17 @@ class StatsDaoImpl : StatsDao {
                 )
             )
         }
+        countryStats.postValue(countryStatList)
     }
 
     private fun parseIndividualJsonData(body: String?, country: String) {
+
+        individualCountryStat.clear()
+
+        val total = Pair("Total Confirmed Cases", "total_cases")
+        val current = Pair("Currently Infected", "active_cases")
+        val recovered = Pair("Recovered", "total_recovered")
+        val deaths = Pair("Deaths", "total_deaths")
 
         val jsonData = JSONObject(body)
         val data = jsonData.getJSONObject("data")
@@ -123,17 +144,12 @@ class StatsDaoImpl : StatsDao {
             val stat = countryObject.getJSONObject(i)
 
             if (stat.get("country") == country) {
-                Log.d(TAG, "Individual Country here")
-                individualStat.value =
-                    CountryStat(
-                        stat.get("country") as String,
-                        stat.get("total_cases") as String,
-                        stat.get("active_cases") as String,
-                        stat.get("total_recovered") as String,
-                        stat.get("total_deaths") as String,
-                        stat.get("flag") as String
-                    )
+                individualCountryStat.add(BottomSheetStats(total.first, stat.getString(total.second), stat.getString("flag")))
+                individualCountryStat.add(BottomSheetStats(current.first, stat.getString(current.second), null))
+                individualCountryStat.add(BottomSheetStats(recovered.first, stat.getString(recovered.second), null))
+                individualCountryStat.add(BottomSheetStats(deaths.first, stat.getString(deaths.second), null))
             }
+            individualStat.postValue(individualCountryStat)
         }
     }
 }

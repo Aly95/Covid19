@@ -9,4 +9,5 @@
     <string name="stats_cases_Text">Cases</string>
     <string name="stats_title_Text">Title</string>
     <string name="stats_updated_Text">Last Updated:</string>
+    <string name="bottomsheet_toolbar_country_Text">Country</string>
 </resources>

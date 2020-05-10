@@ -7,6 +7,6 @@ interface StatsDao {
 
     fun getStats(): LiveData<List<Stats>>
     fun getCountryStats(): LiveData<List<Stats>>
-    fun getIndividualStat(): LiveData<CountryStat>
+    fun getIndividualStat(country: String): LiveData<List<BottomSheetStats>>
 
 }

@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:weightSum="10">
 
-    <ImageView
-        android:id="@+id/bottomsheet_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/abc_vector_test" />
-
-    <TextView
-        android:id="@+id/textView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bottomsheet_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
 
-    <TextView
-        android:id="@+id/textView3"
+        <ImageView
+            android:id="@+id/bottomsheet_toolbar_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/bottomsheet_toolbar_country"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="18sp"
+            tools:text="@string/bottomsheet_toolbar_country_Text"></TextView>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/totalstats_piechart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_height="200dp">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bottomsheet_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

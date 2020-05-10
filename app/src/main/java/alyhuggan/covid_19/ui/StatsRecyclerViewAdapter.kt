@@ -2,6 +2,7 @@ package alyhuggan.covid_19.ui
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.Stats
+import alyhuggan.covid_19.ui.bottomsheet.BottomSheetFragment
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.items_stats.view.*
 
@@ -69,7 +68,10 @@ class StatsRecyclerViewAdapter(
                 holder.itemView.setOnClickListener() {
                     Log.d(TAG, "Hello ${holder.title.text}")
 
-                    val bottomSheetFragment = BottomSheetFragment(holder.title.text.toString())
+                    val bottomSheetFragment =
+                        BottomSheetFragment(
+                            holder.title.text.toString()
+                        )
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                 }
 

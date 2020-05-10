@@ -82,17 +82,4 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         val animation: LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, resId)
         regionstats_recyclerview.layoutAnimation = animation
     }
-
-//    fun bottomSheet() {
-//        val dialog = BottomSheetDialogFragment()
-//        val view = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
-//        val close = view.findViewById<ImageView>(R.id.bottomsheet_close)
-//        close.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        dialog.setCancelable(false)
-//        dialog.setContentView(view)
-//        dialog.show(this.FragmentManager, "Yes")
-//    }
-
 }
