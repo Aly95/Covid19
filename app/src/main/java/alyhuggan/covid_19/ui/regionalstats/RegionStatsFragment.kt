@@ -1,27 +1,20 @@
 package alyhuggan.covid_19.ui.regionalstats
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.stats.Stats
+import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.ui.generic.BaseFragment
-import alyhuggan.covid_19.ui.StatsRecyclerViewAdapter
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
-import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentManager
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_region_stats.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -51,12 +44,12 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
 
     private fun initializeUi() {
 
-        val statList = ArrayList<Stats>()
+        val statList = ArrayList<CountryStats>()
 
         val viewModel = ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stats ->
-            Log.d(TAG, "Stats = $stats")
+            statList.clear()
             stats.forEach { stat ->
                 statList.add(stat)
             }
@@ -65,13 +58,17 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
     }
 
     override fun activateToolbar() {
-        val toolbar = activity!!.findViewById<Toolbar>(R.id.main_toolbar)
-        toolbar.title = "Regional Stats"
+        val toolbar2: TextView = activity!!.findViewById(R.id.maintoolbar_title)
+        toolbar2.text = getString(R.string.region_stats_Text)
     }
 
-    private fun updateRecyclerView(statList: ArrayList<Stats>) {
+    private fun updateRecyclerView(statList: ArrayList<CountryStats>) {
         regionstats_recyclerview.layoutManager = LinearLayoutManager(context)
-        regionstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList, parentFragmentManager)
+        regionstats_recyclerview.adapter =
+            StatsRecyclerViewAdapter(
+                statList,
+                parentFragmentManager
+            )
         regionstats_recyclerview.setHasFixedSize(true)
 
         animate()

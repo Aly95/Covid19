@@ -12,7 +12,33 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/maintoolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="18dp"
+            tools:text="@string/maintoolbar_title_Text"></TextView>
+
+        <ImageView
+            android:id="@+id/maintoolbar_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_share_black_24dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/main_frame"

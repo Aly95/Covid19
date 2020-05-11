@@ -8,6 +8,4 @@ class TotalStatsViewModel(private val statsDao: StatsDao)
 
     fun getStats() = statsDao.getStats()
     fun getCountryStats() = statsDao.getCountryStats()
-    fun getIndividualStat(country: String) = statsDao.getIndividualStat(country)
-
 }

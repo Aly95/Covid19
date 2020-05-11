@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
         android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +41,7 @@
             android:fontFamily="@font/open_sans_semibold"
             android:gravity="center|start"
             android:paddingLeft="4dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:text="@string/stats_title_Text" />
 
         <TextView
@@ -54,6 +55,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="@string/stats_cases_Text" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

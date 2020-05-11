@@ -1,4 +1,4 @@
-package alyhuggan.covid_19.ui
+package alyhuggan.covid_19.ui.totalstats
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.Stats
@@ -41,7 +41,6 @@ class StatsRecyclerViewAdapter(
         val updated = holder.updated
         val cases = holder.cases
         val icon = holder.icon
-        val context = holder.title.context
 
         if (statList.isEmpty()) {
             title.text = ""

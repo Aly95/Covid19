@@ -1,7 +1,7 @@
 package alyhuggan.covid_19.ui.bottomsheet
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.stats.BottomSheetStats
+import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
 import android.graphics.Color
@@ -10,12 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -24,6 +20,8 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.bottomsheet_layout.*
+import kotlinx.android.synthetic.main.bottomsheet_layout.view.*
+import kotlinx.android.synthetic.main.items_bottomsheet.view.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
@@ -52,43 +50,71 @@ class BottomSheetFragment(private val country: String) : BottomSheetDialogFragme
 
         val viewModel =
             ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
-        
-        viewModel.getIndividualStat(country).observe(viewLifecycleOwner, Observer { stat ->
-            if (stat.isNotEmpty()) {
-                updateView(stat)
-                updatePieChart(stat)
+
+        viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stat ->
+            for (i in stat.indices) {
+                if (stat[i].title == country) {
+                    updateView(stat[i])
+                    updatePieChart(stat[i])
+                }
             }
         })
     }
 
-    private fun updateView(stats: List<BottomSheetStats>) {
-        bottomsheet_recyclerview.layoutManager = LinearLayoutManager(context)
-        bottomsheet_recyclerview.adapter = StatsRecyclerViewAdapter(stats)
-        bottomsheet_recyclerview.setHasFixedSize(true)
+    private fun updateView(stats: CountryStats) {
 
-        bottomsheet_toolbar_country.text = country
+        val total = view!!.sheet_total
+        val confirmed = view!!.sheet_confirmed
+        val recovered = view!!.sheet_recovered
+        val deaths = view!!.sheet_deaths
 
-        Picasso.get().load(stats[0].icon)
+        total.bottomsheet_stats_title.text = getString(R.string.item_total_Text)
+        total.bottomsheet_stats_cases.text = stats.totalCases
+        total.bottomsheet_stats_cases.setTextColor(Color.BLUE)
+        total.bottomsheet_stats_icon.setImageResource(R.drawable.ic_globe)
+
+        confirmed.bottomsheet_stats_title.text = getString(R.string.item_current_Text)
+        confirmed.bottomsheet_stats_cases.text = stats.currentCases
+        confirmed.bottomsheet_stats_cases.setTextColor(Color.RED)
+        confirmed.bottomsheet_stats_icon.setImageResource(R.drawable.ic_virus)
+
+        recovered.bottomsheet_stats_title.text = getString(R.string.item_recovered_Text)
+        recovered.bottomsheet_stats_cases.text = stats.recovered
+        recovered.bottomsheet_stats_cases.setTextColor(Color.GREEN)
+        recovered.bottomsheet_stats_icon.setImageResource(R.drawable.ic_heart)
+
+        deaths.bottomsheet_stats_title.text = getString(R.string.item_deaths_Text)
+        deaths.bottomsheet_stats_cases.text = stats.deaths
+        deaths.bottomsheet_stats_cases.setTextColor(Color.GRAY)
+        deaths.bottomsheet_stats_icon.setImageResource(R.drawable.ic_skull)
+
+        bottomsheet_toolbar_country.text = stats.title
+
+        Picasso.get().load(stats.icon)
             .error(R.drawable.placeholder)
             .centerInside()
             .resize(140, 140)
             .into(bottomsheet_toolbar_flag)
+
+        bottomsheet_toolbar_exit.setOnClickListener {
+            val bottomsheet: BottomSheetDialogFragment = this
+            bottomsheet.dismiss()
+        }
     }
 
-    private fun clearView() {
-        bottomsheet_toolbar_country.text = ""
-        bottomsheet_toolbar_flag.setImageResource(android.R.color.transparent)
-    }
-
-    private fun updatePieChart(statList: List<BottomSheetStats>) {
+    private fun updatePieChart(stat: CountryStats) {
 
         val pieChart = view!!.findViewById<PieChart>(R.id.totalstats_piechart)
-
-        Log.d(TAG, "statList $statList")
+        val statList = ArrayList<Pair<String, String>>()
+        var statHolder: Pair<String, String>
 
         val xValues = ArrayList<PieEntry>()
-        var stat: BottomSheetStats
         var casesReplace: String
+
+        statList.add(Pair(stat.totalCases, getString(R.string.item_total_Text)))
+        statList.add(Pair(stat.currentCases, getString(R.string.item_current_Text)))
+        statList.add(Pair(stat.recovered, getString(R.string.item_recovered_Text)))
+        statList.add(Pair(stat.deaths, getString(R.string.item_deaths_Text)))
 
         val colors = ArrayList<Int>()
         colors.add(Color.RED)
@@ -96,14 +122,14 @@ class BottomSheetFragment(private val country: String) : BottomSheetDialogFragme
         colors.add(Color.GRAY)
 
         for (i in 1 until statList.size) {
-            stat = statList[i]
-            casesReplace = stat.cases.replace(",", "")
+            statHolder = statList[i]
+            casesReplace = statHolder.first.replace(",", "")
             Log.d(TAG, "casesReplace $casesReplace")
 
             if (casesReplace == "N/A") {
                 casesReplace = "0"
             } else {
-                xValues.add(PieEntry(casesReplace.toFloat(), stat.title))
+                xValues.add(PieEntry(casesReplace.toFloat(), statHolder.second))
             }
         }
 

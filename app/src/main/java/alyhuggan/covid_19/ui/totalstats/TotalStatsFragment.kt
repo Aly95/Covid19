@@ -3,7 +3,6 @@ package alyhuggan.covid_19.ui.totalstats
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.Stats
 import alyhuggan.covid_19.ui.generic.BaseFragment
-import alyhuggan.covid_19.ui.StatsRecyclerViewAdapter
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
 import android.graphics.Color
@@ -14,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +40,6 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_total_stats, container, false)
     }
 
@@ -54,12 +53,10 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
 
         val statList = ArrayList<Stats>()
 
-//        val viewModel = ViewModelProviders.of(this, viewModelFactory)
-//            .get(TotalStatsViewModel::class.java)
-
         val viewModel = ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
 
         viewModel.getStats().observe(viewLifecycleOwner, Observer { stats ->
+            statList.clear()
             Log.d(TAG, "Stats = $stats")
             stats.forEach { stat ->
                 statList.add(stat)
@@ -70,14 +67,17 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
     }
 
     override fun activateToolbar() {
-        val toolbar = activity!!.findViewById<Toolbar>(R.id.main_toolbar)
-        toolbar.title = "Total Stats"
-        toolbar.setTitleTextColor(Color.WHITE)
+        val title: TextView = activity!!.findViewById(R.id.maintoolbar_title)
+        title.text = getString(R.string.total_stats_Text)
     }
 
     private fun updateRecyclerView(statList: ArrayList<Stats>) {
         totalstats_recyclerview.layoutManager = LinearLayoutManager(context)
-        totalstats_recyclerview.adapter = StatsRecyclerViewAdapter(statList, parentFragmentManager)
+        totalstats_recyclerview.adapter =
+            StatsRecyclerViewAdapter(
+                statList,
+                parentFragmentManager
+            )
         totalstats_recyclerview.setHasFixedSize(true)
         animate()
     }
@@ -124,7 +124,6 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         pieChart.setUsePercentValues(true)
         pieChart.setDrawEntryLabels(false)
         pieChart.setHoleColor(Color.TRANSPARENT)
-//        pieChart.centerText = "Covid-19"
 
         pieChart.data = data
         pieChart.invalidate()

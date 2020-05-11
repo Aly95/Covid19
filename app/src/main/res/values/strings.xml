@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Covid-19</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="total_stats_Text">Total Stats</string>
     <string name="region_stats_Text">Region Stats</string>
@@ -10,4 +8,9 @@
     <string name="stats_title_Text">Title</string>
     <string name="stats_updated_Text">Last Updated:</string>
     <string name="bottomsheet_toolbar_country_Text">Country</string>
+    <string name="item_total_Text">Total Confirmed Cases</string>
+    <string name="item_current_Text">Currently Infected</string>
+    <string name="item_recovered_Text">Recovered</string>
+    <string name="item_deaths_Text">Deaths</string>
+    <string name="maintoolbar_title_Text">Title</string>
 </resources>

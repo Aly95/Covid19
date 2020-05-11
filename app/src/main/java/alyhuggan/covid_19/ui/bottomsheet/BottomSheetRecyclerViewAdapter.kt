@@ -1,10 +1,8 @@
 package alyhuggan.covid_19.ui.bottomsheet
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.stats.BottomSheetStats
-import alyhuggan.covid_19.repository.stats.CountryStat
+import alyhuggan.covid_19.repository.stats.Stats
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +11,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.items_bottomsheet.view.*
-import kotlinx.android.synthetic.main.items_stats.view.*
-import kotlinx.android.synthetic.main.items_stats.view.stats_cases
-import kotlinx.android.synthetic.main.items_stats.view.stats_icon
 
 private const val TAG = "BottomSheetRecyclerVA"
 
@@ -25,7 +20,7 @@ class SheetStatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val icon: ImageView = view.bottomsheet_stats_icon
 }
 
-class StatsRecyclerViewAdapter(private val statList: List<BottomSheetStats>) :
+class StatsRecyclerViewAdapter(private val stat: Stats) :
     RecyclerView.Adapter<SheetStatsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SheetStatsViewHolder {
@@ -34,7 +29,7 @@ class StatsRecyclerViewAdapter(private val statList: List<BottomSheetStats>) :
         return SheetStatsViewHolder(view)
     }
 
-    override fun getItemCount() = statList.size
+    override fun getItemCount() = 1
 
     override fun onBindViewHolder(holder: SheetStatsViewHolder, position: Int) {
 
@@ -43,16 +38,10 @@ class StatsRecyclerViewAdapter(private val statList: List<BottomSheetStats>) :
         val icon = holder.icon
         val iconHolder: Int
 
-        if (statList.isEmpty()) {
-            title.text = ""
-            cases.text = ""
-        } else {
+            title.text = stat.title
+            cases.text = stat.cases
 
-            val statItem = statList[position]
-            title.text = statItem.title
-            cases.text = statItem.cases
-
-            when (statItem.title) {
+            when (stat.title) {
                 "Total Confirmed Cases" -> {
                     iconHolder = R.drawable.ic_globe
                     cases.setTextColor(Color.BLUE)
@@ -80,7 +69,7 @@ class StatsRecyclerViewAdapter(private val statList: List<BottomSheetStats>) :
                 .into(icon)
         }
     }
-}
+
 
 
 

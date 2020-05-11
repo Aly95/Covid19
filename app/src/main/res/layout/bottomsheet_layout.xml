@@ -31,16 +31,18 @@
             android:padding="8dp"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp"
-            tools:text="@string/bottomsheet_toolbar_country_Text"></TextView>
+            tools:text="@string/bottomsheet_toolbar_country_Text">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/bottomsheet_toolbar_exit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:scaleType="fitEnd"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"></ImageView>
 
     </androidx.appcompat.widget.Toolbar>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/totalstats_piechart"
@@ -49,9 +51,25 @@
 
     </com.github.mikephil.charting.charts.PieChart>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bottomsheet_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <include
+            layout="@layout/items_bottomsheet"
+            android:id="@+id/sheet_total">
+        </include>
+
+    <include
+        layout="@layout/items_bottomsheet"
+        android:id="@+id/sheet_confirmed">
+    </include>
+
+    <include
+        layout="@layout/items_bottomsheet"
+        android:id="@+id/sheet_recovered">
+    </include>
+
+    <include
+        layout="@layout/items_bottomsheet"
+        android:id="@+id/sheet_deaths">
+    </include>
+
 
 </LinearLayout>
