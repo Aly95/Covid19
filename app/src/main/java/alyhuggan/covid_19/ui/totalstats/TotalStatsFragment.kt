@@ -5,16 +5,16 @@ import alyhuggan.covid_19.repository.stats.Stats
 import alyhuggan.covid_19.ui.generic.BaseFragment
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,13 +57,20 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
 
         viewModel.getStats().observe(viewLifecycleOwner, Observer { stats ->
             statList.clear()
-            Log.d(TAG, "Stats = $stats")
             stats.forEach { stat ->
                 statList.add(stat)
             }
-            updateRecyclerView(statList)
-            updatePieChart(statList)
+            if(!statList.isNullOrEmpty()) {
+                total_progressbar.visibility = View.GONE
+                updateRecyclerView(statList)
+                updatePieChart(statList)
+            }
         })
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
     }
 
     override fun activateToolbar() {

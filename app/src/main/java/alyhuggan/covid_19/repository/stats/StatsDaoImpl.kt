@@ -27,10 +27,7 @@ class StatsDaoImpl : StatsDao {
     }
 
     override fun getStats() = stats as LiveData<List<Stats>>
-    override fun getCountryStats() =
-        countryStats as LiveData<List<CountryStats>> //TODO("CHANGE LIST STATS TO LIST OF COUNTRY STATS")
-
-//    private fun retrieveCountryName(url: String) = url.substringAfter(" ")
+    override fun getCountryStats() = countryStats as LiveData<List<CountryStats>>
 
     /*
     Retrieves JSON data from given URL and passes it to the respective function to be be parsed
@@ -90,7 +87,6 @@ class StatsDaoImpl : StatsDao {
                     null
                 )
             )
-            Log.d(TAG, "${stats.value}")
         }
         stats.postValue(statList)
     }

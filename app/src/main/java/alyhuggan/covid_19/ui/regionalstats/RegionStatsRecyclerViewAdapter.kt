@@ -6,6 +6,7 @@ import alyhuggan.covid_19.repository.stats.Stats
 import alyhuggan.covid_19.ui.bottomsheet.BottomSheetFragment
 import alyhuggan.covid_19.ui.totalstats.StatsViewHolder
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -70,10 +71,14 @@ class StatsRecyclerViewAdapter(
                 holder.itemView.setOnClickListener() {
                     Log.d(TAG, "Hello ${holder.title.text}")
 
+
                     val bottomSheetFragment =
                         BottomSheetFragment(
-                            holder.title.text.toString()
+//                            holder.title.text.toString()
                         )
+                    val args = Bundle()
+                    args.putString("COUNTRY", holder.title.text.toString())
+                    bottomSheetFragment.arguments = args
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                 }
 

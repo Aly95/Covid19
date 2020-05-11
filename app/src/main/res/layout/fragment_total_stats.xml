@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    android:orientation="vertical"
     android:weightSum="4"
     tools:context=".ui.totalstats.TotalStatsFragment">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/totalstats_recyclerview"
+    <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="4">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/totalstats_piechart"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
-        android:layout_weight="1" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/totalstats_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3">
 
-</LinearLayout>
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/totalstats_piechart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/total_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout4"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

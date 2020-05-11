@@ -5,6 +5,7 @@ import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.ui.generic.BaseFragment
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,6 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_region_stats, container, false)
     }
 
@@ -40,7 +40,6 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         activateToolbar()
         initializeUi()
     }
-
 
     private fun initializeUi() {
 
@@ -53,7 +52,10 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
             stats.forEach { stat ->
                 statList.add(stat)
             }
-            updateRecyclerView(statList)
+            if(!statList.isNullOrEmpty()) {
+                region_progressbar.visibility = View.GONE
+                updateRecyclerView(statList)
+            }
         })
     }
 

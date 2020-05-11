@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="alyhuggan.covid_19">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".repository.KodeinInjection"
@@ -12,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/MaterialDesign">
         <activity android:name=".ui.MainActivity">
+<!--            android:configChanges="orientation|screenSize|keyboardHidden">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,6 +22,10 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key">
+        </meta-data>
     </application>
 
 </manifest>

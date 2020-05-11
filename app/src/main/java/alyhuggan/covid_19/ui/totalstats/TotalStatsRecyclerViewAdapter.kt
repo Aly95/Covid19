@@ -69,7 +69,7 @@ class StatsRecyclerViewAdapter(
 
                     val bottomSheetFragment =
                         BottomSheetFragment(
-                            holder.title.text.toString()
+//                            holder.title.text.toString()
                         )
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                 }

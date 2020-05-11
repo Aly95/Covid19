@@ -4,6 +4,7 @@ import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
 import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -28,7 +29,8 @@ import org.kodein.di.generic.instance
 
 private const val TAG = "BottomSheetFragment"
 
-class BottomSheetFragment(private val country: String) : BottomSheetDialogFragment(), KodeinAware {
+//class BottomSheetFragment(private val country: String?) : BottomSheetDialogFragment(), KodeinAware {
+class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModelFactory by instance<TotalStatsViewModelFactory>()
@@ -43,17 +45,20 @@ class BottomSheetFragment(private val country: String) : BottomSheetDialogFragme
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initializeUi()
+        val name = arguments!!.getString("COUNTRY")
+        if(name != null)
+        initializeUi(name)
     }
 
-    private fun initializeUi() {
+    private fun initializeUi(name: String) {
 
         val viewModel =
             ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stat ->
             for (i in stat.indices) {
-                if (stat[i].title == country) {
+//                if (stat[i].title == country) {
+                if (stat[i].title == name) {
                     updateView(stat[i])
                     updatePieChart(stat[i])
                 }
@@ -61,7 +66,14 @@ class BottomSheetFragment(private val country: String) : BottomSheetDialogFragme
         })
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d(TAG, "onConfigurationChange")
+    }
+
     private fun updateView(stats: CountryStats) {
+
+        val bottomsheet: BottomSheetDialogFragment = this
 
         val total = view!!.sheet_total
         val confirmed = view!!.sheet_confirmed
@@ -97,7 +109,6 @@ class BottomSheetFragment(private val country: String) : BottomSheetDialogFragme
             .into(bottomsheet_toolbar_flag)
 
         bottomsheet_toolbar_exit.setOnClickListener {
-            val bottomsheet: BottomSheetDialogFragment = this
             bottomsheet.dismiss()
         }
     }

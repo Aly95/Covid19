@@ -6,22 +6,27 @@ import alyhuggan.covid_19.ui.regionalstats.RegionStatsFragment
 import alyhuggan.covid_19.ui.totalstats.TotalStatsFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.kodein.di.android.retainedKodein
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        this.supportActionBar?.hide()
-        initializeUi()
+        initializeUi(savedInstanceState)
     }
 
-    private fun initializeUi() {
+    private fun initializeUi(instance: Bundle?) {
 
-        changeFragment(TotalStatsFragment()) //setting initial fragment to TotalStats
+        if(instance == null) {
+            changeFragment(TotalStatsFragment(), "total")
+        }
 
         /*
         Retrieving bottom nav bar, setting onClickListener to listen for click events and swapping out fragments accordingly
@@ -31,13 +36,13 @@ class MainActivity : AppCompatActivity() {
 
             when (item.itemId) {
                 R.id.menu_totalstats -> {
-                    changeFragment(TotalStatsFragment())
+                    changeFragment(TotalStatsFragment(), "total")
                 }
                 R.id.menu_regionstats -> {
-                    changeFragment(RegionStatsFragment())
+                    changeFragment(RegionStatsFragment(), "region")
                 }
                 R.id.menu_covidmap -> {
-                    changeFragment(CovidMapFragment())
+                    changeFragment(CovidMapFragment(), "map")
                 }
             }
             true
@@ -47,12 +52,15 @@ class MainActivity : AppCompatActivity() {
     /*
     Function to swap fragments with passed in fragment instance
      */
-    private fun changeFragment(fragment: Fragment) {
-        supportFragmentManager
+    private fun changeFragment(fragment: Fragment, name: String) {
+
+        val transaction = supportFragmentManager
             .beginTransaction()
-            .replace(R.id.main_frame, fragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-//            .addToBackStack(null)
-            .commit()
+            .replace(R.id.main_frame, fragment, name)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        if (supportFragmentManager.findFragmentByTag(name) == null) {
+            transaction.addToBackStack(null)
+        }
+        transaction.commit()
     }
 }
