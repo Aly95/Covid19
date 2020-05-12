@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomsheet_landscape"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/primary_light"
     android:orientation="vertical"
     android:weightSum="10">
 
@@ -31,8 +33,7 @@
             android:padding="8dp"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp"
-            tools:text="@string/bottomsheet_toolbar_country_Text">
-        </TextView>
+            tools:text="@string/bottomsheet_toolbar_country_Text"></TextView>
 
         <ImageView
             android:id="@+id/bottomsheet_toolbar_exit"
@@ -74,7 +75,8 @@
 
             <include
                 android:id="@+id/sheet_total"
-                layout="@layout/items_bottomsheet"></include>
+                layout="@layout/items_bottomsheet"
+                android:background="@color/primary_light"></include>
 
             <include
                 android:id="@+id/sheet_confirmed"

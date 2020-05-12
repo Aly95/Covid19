@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -53,13 +54,13 @@ class StatsRecyclerViewAdapter(
             icon.setImageResource(R.drawable.placeholder)
         } else {
             val statItem = statList[position]
+            val context = holder.title.context
+
             title.text = statItem.title
             updated.text = "Last Updated: ${statItem.updated}"
             cases.text = statItem.totalCases
 
-            if (statItem.icon != null) {
-
-                cases.setTextColor(Color.BLUE)
+                cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorBlue))
 
                 Picasso.get().load(statItem.icon)
                     .error(R.drawable.placeholder)
@@ -69,47 +70,13 @@ class StatsRecyclerViewAdapter(
                     .into(icon)
 
                 holder.itemView.setOnClickListener() {
-                    Log.d(TAG, "Hello ${holder.title.text}")
-
-
                     val bottomSheetFragment =
-                        BottomSheetFragment(
-//                            holder.title.text.toString()
-                        )
+                        BottomSheetFragment()
                     val args = Bundle()
                     args.putString("COUNTRY", holder.title.text.toString())
                     bottomSheetFragment.arguments = args
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                 }
-
-            } else {
-                var totalIcon: Int = 0
-
-                when (statItem.title) {
-                    "Total Confirmed Cases" -> {
-                        totalIcon = R.drawable.ic_globe
-                        cases.setTextColor(Color.BLUE)
-                    }
-                    "Currently Infected" -> {
-                        totalIcon = R.drawable.ic_virus
-                        cases.setTextColor(Color.RED)
-                    }
-                    "Recovered" -> {
-                        totalIcon = R.drawable.ic_heart
-                        cases.setTextColor(Color.GREEN)
-                    }
-                    "Deaths" -> {
-                        Log.d(TAG, "Skull")
-                        totalIcon = R.drawable.ic_skull
-                        cases.setTextColor(Color.GRAY)
-                    }
-                }
-                Picasso.get().load(totalIcon)
-                    .error(R.drawable.placeholder)
-                    .centerInside()
-                    .resize(140, 140)
-                    .into(icon)
-            }
         }
     }
 }

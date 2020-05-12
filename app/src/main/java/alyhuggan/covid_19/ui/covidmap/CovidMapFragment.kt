@@ -2,8 +2,8 @@ package alyhuggan.covid_19.ui.covidmap
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.ui.bottomsheet.BottomSheetFragment
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
+import alyhuggan.covid_19.viewmodel.ViewModel
+import alyhuggan.covid_19.viewmodel.ViewModelFactory
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.GoogleMap
@@ -19,6 +18,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_covid_map.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -30,7 +31,7 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
     OnMapReadyCallback {
 
     override val kodein by closestKodein()
-    private val viewModelFactory by instance<TotalStatsViewModelFactory>()
+    private val viewModelFactory by instance<ViewModelFactory>()
     lateinit var googleMap: GoogleMap
 
     override fun onCreateView(
@@ -90,7 +91,7 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
         val countryList = ArrayList<String>()
         val coordinates = ArrayList<Pair<String, Pair<Double, Double>>>()
         val viewModel =
-            ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stat ->
             countryList.clear()
@@ -111,7 +112,12 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
                 )
         }
         map!!.setOnMarkerClickListener(this)
-                    map_view.visibility = View.VISIBLE
-        //Cancel loading bar here
+        map_view.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigation = activity!!.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
+        bottomNavigation.menu.getItem(2).isChecked = true
     }
 }

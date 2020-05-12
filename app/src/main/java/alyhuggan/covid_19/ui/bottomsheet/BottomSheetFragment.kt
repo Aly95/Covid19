@@ -2,8 +2,9 @@ package alyhuggan.covid_19.ui.bottomsheet
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.CountryStats
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
+import alyhuggan.covid_19.viewmodel.ViewModel
+import alyhuggan.covid_19.viewmodel.ViewModelFactory
+import android.app.Dialog
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.PieChart
@@ -18,8 +21,10 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottomsheet_layout.*
 import kotlinx.android.synthetic.main.bottomsheet_layout.view.*
 import kotlinx.android.synthetic.main.items_bottomsheet.view.*
@@ -27,13 +32,14 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
+
 private const val TAG = "BottomSheetFragment"
 
 //class BottomSheetFragment(private val country: String?) : BottomSheetDialogFragment(), KodeinAware {
 class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
 
     override val kodein by closestKodein()
-    private val viewModelFactory by instance<TotalStatsViewModelFactory>()
+    private val viewModelFactory by instance<ViewModelFactory>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +49,29 @@ class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
         return inflater.inflate(R.layout.bottomsheet_layout, container, false)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+
+        dialog.setOnShowListener {
+            val bottomsheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val behavior = BottomSheetBehavior.from(bottomsheet)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dialog
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val name = arguments!!.getString("COUNTRY")
-        if(name != null)
-        initializeUi(name)
+        if(name != null) {
+            initializeUi(name)
+        }
     }
 
     private fun initializeUi(name: String) {
 
         val viewModel =
-            ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stat ->
             for (i in stat.indices) {
@@ -82,22 +100,22 @@ class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
 
         total.bottomsheet_stats_title.text = getString(R.string.item_total_Text)
         total.bottomsheet_stats_cases.text = stats.totalCases
-        total.bottomsheet_stats_cases.setTextColor(Color.BLUE)
+        total.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorBlue))
         total.bottomsheet_stats_icon.setImageResource(R.drawable.ic_globe)
 
         confirmed.bottomsheet_stats_title.text = getString(R.string.item_current_Text)
         confirmed.bottomsheet_stats_cases.text = stats.currentCases
-        confirmed.bottomsheet_stats_cases.setTextColor(Color.RED)
+        confirmed.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorRed))
         confirmed.bottomsheet_stats_icon.setImageResource(R.drawable.ic_virus)
 
         recovered.bottomsheet_stats_title.text = getString(R.string.item_recovered_Text)
         recovered.bottomsheet_stats_cases.text = stats.recovered
-        recovered.bottomsheet_stats_cases.setTextColor(Color.GREEN)
+        recovered.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorGreen))
         recovered.bottomsheet_stats_icon.setImageResource(R.drawable.ic_heart)
 
         deaths.bottomsheet_stats_title.text = getString(R.string.item_deaths_Text)
         deaths.bottomsheet_stats_cases.text = stats.deaths
-        deaths.bottomsheet_stats_cases.setTextColor(Color.GRAY)
+        deaths.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorGrey))
         deaths.bottomsheet_stats_icon.setImageResource(R.drawable.ic_skull)
 
         bottomsheet_toolbar_country.text = stats.title
@@ -128,9 +146,9 @@ class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
         statList.add(Pair(stat.deaths, getString(R.string.item_deaths_Text)))
 
         val colors = ArrayList<Int>()
-        colors.add(Color.RED)
-        colors.add(Color.GREEN)
-        colors.add(Color.GRAY)
+        colors.add(ContextCompat.getColor(context!!, R.color.colorRed))
+        colors.add(ContextCompat.getColor(context!!, R.color.colorGreen))
+        colors.add(ContextCompat.getColor(context!!, R.color.colorGrey))
 
         for (i in 1 until statList.size) {
             statHolder = statList[i]

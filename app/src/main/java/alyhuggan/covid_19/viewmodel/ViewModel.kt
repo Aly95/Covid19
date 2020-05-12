@@ -1,9 +1,9 @@
-package alyhuggan.covid_19.viewmodel.totalstats
+package alyhuggan.covid_19.viewmodel
 
 import alyhuggan.covid_19.repository.stats.StatsDao
 import androidx.lifecycle.ViewModel
 
-class TotalStatsViewModel(private val statsDao: StatsDao)
+class ViewModel(private val statsDao: StatsDao)
     : ViewModel() {
 
     fun getStats() = statsDao.getStats()

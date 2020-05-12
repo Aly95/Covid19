@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@color/primary_light"
     android:orientation="horizontal"
     android:weightSum="10"
     tools:context=".ui.totalstats.TotalStatsFragment">
@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
-        android:layout_weight="6" >
+        android:layout_weight="6">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -3,9 +3,8 @@ package alyhuggan.covid_19.ui.regionalstats
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.ui.generic.BaseFragment
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModel
-import alyhuggan.covid_19.viewmodel.totalstats.TotalStatsViewModelFactory
-import android.content.res.Configuration
+import alyhuggan.covid_19.viewmodel.ViewModel
+import alyhuggan.covid_19.viewmodel.ViewModelFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,8 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_region_stats.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -26,7 +27,7 @@ private const val TAG = "RegionStatsFrag"
 class RegionStatsFragment : BaseFragment(), KodeinAware {
 
     override val kodein by closestKodein()
-    private val viewModelFactory by instance<TotalStatsViewModelFactory>()
+    private val viewModelFactory by instance<ViewModelFactory>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +42,17 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         initializeUi()
     }
 
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigation = activity!!.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
+        bottomNavigation.menu.getItem(1).isChecked = true
+    }
+
     private fun initializeUi() {
 
         val statList = ArrayList<CountryStats>()
 
-        val viewModel = ViewModelProvider(this, viewModelFactory).get(TotalStatsViewModel::class.java)
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stats ->
             statList.clear()

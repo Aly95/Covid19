@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -75,28 +76,30 @@ class StatsRecyclerViewAdapter(
                 }
 
             } else {
-                var totalIcon: Int = 0
+
+                var iconResource: Int = 0
+                val context = holder.title.context
 
                 when (statItem.title) {
                     "Total Confirmed Cases" -> {
-                        totalIcon = R.drawable.ic_globe
-                        cases.setTextColor(Color.BLUE)
+                        iconResource = R.drawable.ic_globe
+                        cases.setTextColor(ContextCompat.getColor(context, R.color.colorBlue))
                     }
                     "Currently Infected" -> {
-                        totalIcon = R.drawable.ic_virus
-                        cases.setTextColor(Color.RED)
+                        iconResource = R.drawable.ic_virus
+                        cases.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
                     }
                     "Recovered" -> {
-                        totalIcon = R.drawable.ic_heart
-                        cases.setTextColor(Color.GREEN)
+                        iconResource = R.drawable.ic_heart
+                        cases.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
                     }
                     "Deaths" -> {
                         Log.d(TAG, "Skull")
-                        totalIcon = R.drawable.ic_skull
-                        cases.setTextColor(Color.GRAY)
+                        iconResource = R.drawable.ic_skull
+                        cases.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
                     }
                 }
-                Picasso.get().load(totalIcon)
+                Picasso.get().load(iconResource)
                     .error(R.drawable.placeholder)
                     .centerInside()
                     .resize(140, 140)

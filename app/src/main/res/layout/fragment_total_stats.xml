@@ -5,7 +5,7 @@
     android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@color/primary_light"
     android:weightSum="4"
     tools:context=".ui.totalstats.TotalStatsFragment">
 
@@ -29,6 +29,7 @@
             android:id="@+id/totalstats_piechart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1" />
 
     </LinearLayout>
