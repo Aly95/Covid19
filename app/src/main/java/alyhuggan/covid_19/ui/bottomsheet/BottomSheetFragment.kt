@@ -35,7 +35,6 @@ import org.kodein.di.generic.instance
 
 private const val TAG = "BottomSheetFragment"
 
-//class BottomSheetFragment(private val country: String?) : BottomSheetDialogFragment(), KodeinAware {
 class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
 
     override val kodein by closestKodein()
@@ -75,7 +74,6 @@ class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
 
         viewModel.getCountryStats().observe(viewLifecycleOwner, Observer { stat ->
             for (i in stat.indices) {
-//                if (stat[i].title == country) {
                 if (stat[i].title == name) {
                     updateView(stat[i])
                     updatePieChart(stat[i])
@@ -101,22 +99,22 @@ class BottomSheetFragment() : BottomSheetDialogFragment(), KodeinAware {
         total.bottomsheet_stats_title.text = getString(R.string.item_total_Text)
         total.bottomsheet_stats_cases.text = stats.totalCases
         total.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorBlue))
-        total.bottomsheet_stats_icon.setImageResource(R.drawable.ic_globe)
+        total.bottomsheet_stats_icon.setImageResource(R.drawable.ic_total)
 
         confirmed.bottomsheet_stats_title.text = getString(R.string.item_current_Text)
         confirmed.bottomsheet_stats_cases.text = stats.currentCases
         confirmed.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorRed))
-        confirmed.bottomsheet_stats_icon.setImageResource(R.drawable.ic_virus)
+        confirmed.bottomsheet_stats_icon.setImageResource(R.drawable.ic_current)
 
         recovered.bottomsheet_stats_title.text = getString(R.string.item_recovered_Text)
         recovered.bottomsheet_stats_cases.text = stats.recovered
         recovered.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorGreen))
-        recovered.bottomsheet_stats_icon.setImageResource(R.drawable.ic_heart)
+        recovered.bottomsheet_stats_icon.setImageResource(R.drawable.ic_recovered)
 
         deaths.bottomsheet_stats_title.text = getString(R.string.item_deaths_Text)
         deaths.bottomsheet_stats_cases.text = stats.deaths
         deaths.bottomsheet_stats_cases.setTextColor(ContextCompat.getColor(context!!, R.color.colorGrey))
-        deaths.bottomsheet_stats_icon.setImageResource(R.drawable.ic_skull)
+        deaths.bottomsheet_stats_icon.setImageResource(R.drawable.ic_deaths)
 
         bottomsheet_toolbar_country.text = stats.title
 

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,7 +33,6 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
 
     override val kodein by closestKodein()
     private val viewModelFactory by instance<ViewModelFactory>()
-    lateinit var googleMap: GoogleMap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,18 +44,24 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if(savedInstanceState != null) {
-
-        }
         map_view.onCreate(savedInstanceState)
         map_view.onResume()
         initializeUi()
+        activateToolbar()
     }
 
     private fun initializeUi() {
-
         map_view.onResume()
         map_view.getMapAsync(this)
+    }
+
+    private fun shareScreenshot() {
+        maintoolbar_share.setOnClickListener {
+            snapShot();
+        }
+    }
+
+    private fun snapShot() {
 
     }
 
@@ -72,7 +78,7 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
         val myFragment = BottomSheetFragment()
         val args = Bundle()
         args.putInt("someInt", someInt)
-        myFragment.setArguments(args)
+        myFragment.arguments = args
         return myFragment
     }
 
@@ -119,5 +125,10 @@ class CovidMapFragment : Fragment(), KodeinAware, GoogleMap.OnMarkerClickListene
         super.onResume()
         val bottomNavigation = activity!!.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
         bottomNavigation.menu.getItem(2).isChecked = true
+    }
+
+    private fun activateToolbar() {
+        val toolbar2: TextView = activity!!.findViewById(R.id.maintoolbar_title)
+        toolbar2.text = getString(R.string.covid_map_Text)
     }
 }

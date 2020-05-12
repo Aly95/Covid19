@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,7 @@ import org.kodein.di.generic.instance
 
 private const val TAG = "RegionStatsFrag"
 
-class RegionStatsFragment : BaseFragment(), KodeinAware {
+class RegionStatsFragment : Fragment(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModelFactory by instance<ViewModelFactory>()
@@ -66,7 +67,7 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         })
     }
 
-    override fun activateToolbar() {
+    private fun activateToolbar() {
         val toolbar2: TextView = activity!!.findViewById(R.id.maintoolbar_title)
         toolbar2.text = getString(R.string.region_stats_Text)
     }
@@ -79,7 +80,6 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
                 parentFragmentManager
             )
         regionstats_recyclerview.setHasFixedSize(true)
-
         animate()
     }
 
@@ -88,4 +88,5 @@ class RegionStatsFragment : BaseFragment(), KodeinAware {
         val animation: LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, resId)
         regionstats_recyclerview.layoutAnimation = animation
     }
+
 }

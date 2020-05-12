@@ -43,19 +43,19 @@ class StatsRecyclerViewAdapter(private val stat: Stats) :
 
             when (stat.title) {
                 "Total Confirmed Cases" -> {
-                    iconHolder = R.drawable.ic_globe
+                    iconHolder = R.drawable.ic_total
                     cases.setTextColor(Color.BLUE)
                 }
                 "Currently Infected" -> {
-                    iconHolder = R.drawable.ic_virus
+                    iconHolder = R.drawable.ic_current
                     cases.setTextColor(Color.RED)
                 }
                 "Recovered" -> {
-                    iconHolder = R.drawable.ic_heart
+                    iconHolder = R.drawable.ic_recovered
                     cases.setTextColor(Color.GREEN)
                 }
                 "Deaths" -> {
-                    iconHolder = R.drawable.ic_skull
+                    iconHolder = R.drawable.ic_deaths
                     cases.setTextColor(Color.GRAY)
                 }
                 else -> {
@@ -65,7 +65,7 @@ class StatsRecyclerViewAdapter(private val stat: Stats) :
             Picasso.get().load(iconHolder)
                 .error(R.drawable.placeholder)
                 .centerInside()
-                .resize(140, 140)
+                .resize(60, 60)
                 .into(icon)
         }
     }

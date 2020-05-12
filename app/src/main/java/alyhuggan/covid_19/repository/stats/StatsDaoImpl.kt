@@ -62,7 +62,7 @@ class StatsDaoImpl : StatsDao {
     private fun parseGeneralJsonData(body: String?) {
 
         var titleArray = mutableListOf<Pair<String, String>>()
-        val total = Pair("Total Confirmed Cases", "total_cases")
+        val total = Pair("Confirmed Cases", "total_cases")
         val current = Pair("Currently Infected", "currently_infected")
         val recovered = Pair("Recovered", "recovery_cases")
         val deaths = Pair("Deaths", "death_cases")

@@ -8,7 +8,7 @@
     <string name="stats_title_Text">Title</string>
     <string name="stats_updated_Text">Last Updated:</string>
     <string name="bottomsheet_toolbar_country_Text">Country</string>
-    <string name="item_total_Text">Total Confirmed Cases</string>
+    <string name="item_total_Text">Confirmed Cases</string>
     <string name="item_current_Text">Currently Infected</string>
     <string name="item_recovered_Text">Recovered</string>
     <string name="item_deaths_Text">Deaths</string>

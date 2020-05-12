@@ -26,7 +26,8 @@
             android:textSize="18dp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="18dp"
-            tools:text="@string/maintoolbar_title_Text"></TextView>
+            tools:text="@string/maintoolbar_title_Text">
+        </TextView>
 
         <ImageView
             android:id="@+id/maintoolbar_share"
@@ -47,7 +48,6 @@
         android:layout_above="@id/bottom_nav_bar"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav_bar"
         app:layout_constraintTop_toBottomOf="@+id/main_toolbar">
-
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

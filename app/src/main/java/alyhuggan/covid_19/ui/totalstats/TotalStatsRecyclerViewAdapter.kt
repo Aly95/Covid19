@@ -69,9 +69,7 @@ class StatsRecyclerViewAdapter(
                     Log.d(TAG, "Hello ${holder.title.text}")
 
                     val bottomSheetFragment =
-                        BottomSheetFragment(
-//                            holder.title.text.toString()
-                        )
+                        BottomSheetFragment()
                     bottomSheetFragment.show(fragmentManager, bottomSheetFragment.tag)
                 }
 
@@ -81,28 +79,28 @@ class StatsRecyclerViewAdapter(
                 val context = holder.title.context
 
                 when (statItem.title) {
-                    "Total Confirmed Cases" -> {
-                        iconResource = R.drawable.ic_globe
+                    "Confirmed Cases" -> {
+                        iconResource = R.drawable.ic_total
                         cases.setTextColor(ContextCompat.getColor(context, R.color.colorBlue))
                     }
                     "Currently Infected" -> {
-                        iconResource = R.drawable.ic_virus
+                        iconResource = R.drawable.ic_current
                         cases.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
                     }
                     "Recovered" -> {
-                        iconResource = R.drawable.ic_heart
+                        iconResource = R.drawable.ic_recovered
                         cases.setTextColor(ContextCompat.getColor(context, R.color.colorGreen))
                     }
                     "Deaths" -> {
                         Log.d(TAG, "Skull")
-                        iconResource = R.drawable.ic_skull
+                        iconResource = R.drawable.ic_deaths
                         cases.setTextColor(ContextCompat.getColor(context, R.color.colorGrey))
                     }
                 }
                 Picasso.get().load(iconResource)
                     .error(R.drawable.placeholder)
                     .centerInside()
-                    .resize(140, 140)
+                    .resize(180, 180)
                     .into(icon)
             }
         }

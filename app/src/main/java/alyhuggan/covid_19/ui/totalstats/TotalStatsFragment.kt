@@ -15,6 +15,7 @@ import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +34,7 @@ import org.kodein.di.generic.instance
 
 private const val TAG = "TotalStatsFrag"
 
-class TotalStatsFragment : BaseFragment(), KodeinAware {
+class TotalStatsFragment : Fragment(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModelFactory by instance<ViewModelFactory>()
@@ -75,7 +76,7 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
 
     }
 
-    override fun activateToolbar() {
+    private fun activateToolbar() {
         val title: TextView = activity!!.findViewById(R.id.maintoolbar_title)
         title.text = getString(R.string.total_stats_Text)
     }
