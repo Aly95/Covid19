@@ -1,15 +1,21 @@
 package alyhuggan.covid_19.repository.stats
 
+import alyhuggan.covid_19.ui.MainActivity
+import alyhuggan.covid_19.ui.totalstats.TotalStatsFragment
+import android.location.Geocoder
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import okhttp3.*
 import org.json.JSONObject
+import org.kodein.di.generic.contextFinder
 import java.io.IOException
+import kotlin.coroutines.coroutineContext
 
 private const val TAG = "StatsDaoImpl"
 
-class StatsDaoImpl : StatsDao {
+class StatsDaoImpl : StatsDao, Fragment() {
 
     //LiveData variables
     private val stats = MutableLiveData<List<Stats>>()
@@ -31,7 +37,7 @@ class StatsDaoImpl : StatsDao {
 
     /*
     Retrieves JSON data from given URL and passes it to the respective function to be be parsed
-     */
+    */
     private fun getJsonData(url: String) {
 
         val general = "https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats"
@@ -116,4 +122,6 @@ class StatsDaoImpl : StatsDao {
         }
         countryStats.postValue(countryStatList)
     }
+
 }
+

@@ -1,5 +1,6 @@
 package alyhuggan.covid_19.repository.stats
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 
 interface StatsDao {
