@@ -2,20 +2,21 @@ package alyhuggan.covid_19.ui.totalstats
 
 import alyhuggan.covid_19.R
 import alyhuggan.covid_19.repository.stats.Stats
-import alyhuggan.covid_19.ui.generic.BaseFragment
+import alyhuggan.covid_19.ui.BaseFragment
 import alyhuggan.covid_19.viewmodel.ViewModel
 import alyhuggan.covid_19.viewmodel.ViewModelFactory
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_total_stats.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -34,7 +34,7 @@ import org.kodein.di.generic.instance
 
 private const val TAG = "TotalStatsFrag"
 
-class TotalStatsFragment : Fragment(), KodeinAware {
+class TotalStatsFragment : BaseFragment(), KodeinAware {
 
     override val kodein by closestKodein()
     private val viewModelFactory by instance<ViewModelFactory>()
@@ -43,6 +43,12 @@ class TotalStatsFragment : Fragment(), KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d(TAG, "Handling back pressed")
+                activity?.finish()
+            }
+        })
         return inflater.inflate(R.layout.fragment_total_stats, container, false)
     }
 
@@ -50,6 +56,7 @@ class TotalStatsFragment : Fragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
         activateToolbar()
         initializeUi()
+        setUpScreenshot()
     }
 
     private fun initializeUi() {
@@ -63,7 +70,7 @@ class TotalStatsFragment : Fragment(), KodeinAware {
             stats.forEach { stat ->
                 statList.add(stat)
             }
-            if(!statList.isNullOrEmpty()) {
+            if (!statList.isNullOrEmpty()) {
                 total_progressbar.visibility = View.GONE
                 updateRecyclerView(statList)
                 updatePieChart(statList)
@@ -94,7 +101,8 @@ class TotalStatsFragment : Fragment(), KodeinAware {
 
     private fun animate() {
         val resId = R.anim.animation_fall_down
-        val animation: LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, resId)
+        val animation: LayoutAnimationController =
+            AnimationUtils.loadLayoutAnimation(context, resId)
         totalstats_recyclerview.layoutAnimation = animation
     }
 

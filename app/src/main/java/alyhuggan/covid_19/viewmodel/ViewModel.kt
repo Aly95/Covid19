@@ -1,5 +1,6 @@
 package alyhuggan.covid_19.viewmodel
 
+import alyhuggan.covid_19.repository.stats.Coordinate
 import alyhuggan.covid_19.repository.stats.CountryStats
 import alyhuggan.covid_19.repository.stats.StatsDao
 import android.content.Context
@@ -13,8 +14,9 @@ private const val TAG = "ViewModel"
 class ViewModel(private val statsDao: StatsDao)
     : ViewModel() {
 
-    private val coordinates = MutableLiveData<List<Pair<String, Pair<Double, Double>>>>()
-    private val coordinateList = mutableListOf<Pair<String, Pair<Double, Double>>>()
+    private val coordinates = MutableLiveData<List<Coordinate>>()
+    private val coordinateList = mutableListOf<Coordinate>()
+    private var countryStats = ArrayList<CountryStats>()
 
     init {
         coordinates.value = coordinateList
@@ -24,23 +26,22 @@ class ViewModel(private val statsDao: StatsDao)
     fun getCountryStats() = statsDao.getCountryStats()
     fun retrieveCoordinates() = coordinates
 
-    fun getCoordinates(countryList: List<CountryStats>, context: Context) {
+    fun getCoordinates(context: Context) {
 
-        val coordinatesList = mutableListOf<Pair<String, Pair<Double, Double>>>()
+        countryStats = getCountryStats().value as ArrayList<CountryStats>
+
+        val coordinatesList = mutableListOf<Coordinate>()
 
         val geocoder: Geocoder = Geocoder(context)
 
-        if (!countryList.isNullOrEmpty()) {
-            coordinatesList.clear()
-            for (i in countryList.indices) {
-                val geoDetails = geocoder.getFromLocationName(countryList[i].title, 1)
+        if (!countryStats.isNullOrEmpty()) {
+            for (i in countryStats.indices) {
+                val geoDetails = geocoder.getFromLocationName(countryStats[i].title, 1)
                 geoDetails.forEach {
-                    coordinatesList.add(Pair(countryList[i].title, Pair(it.latitude, it.longitude)))
-                    Log.d(TAG, "Coordinate list = $coordinatesList")
+                    coordinatesList.add(Coordinate(countryStats[i].title, it.latitude, it.longitude))
                 }
             }
             coordinates.postValue(coordinatesList)
         }
     }
-
 }
