@@ -138,21 +138,23 @@ class CovidMapFragment : BaseFragment(), KodeinAware, GoogleMap.OnMarkerClickLis
         //Creating a listener object for the share button
         activity!!.maintoolbar_share.setOnClickListener {
 
-            //Using map.snapshot as Google Map Api2 shows blank on a full screen screenshot
-            map.snapshot {
-                val file = saveBitmap(it, "screenshot.png")
-                val apkURI = FileProvider.getUriForFile(
-                    context!!,
-                    context!!.applicationContext.packageName + ".provider",
-                    file
-                )
+            if (checkPermissions()) {
+                //Using map.snapshot as Google Map Api2 shows blank on a full screen screenshot
+                map.snapshot {
+                    val file = saveBitmap(it, "screenshot.png")
+                    val apkURI = FileProvider.getUriForFile(
+                        context!!,
+                        context!!.applicationContext.packageName + ".provider",
+                        file
+                    )
 
-                val shareIntent = Intent()
-                shareIntent.action = Intent.ACTION_SEND
-                shareIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
-                shareIntent.type = "image/*"
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivity(Intent.createChooser(shareIntent, "share via"))
+                    val shareIntent = Intent()
+                    shareIntent.action = Intent.ACTION_SEND
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
+                    shareIntent.type = "image/*"
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(Intent.createChooser(shareIntent, "share via"))
+                }
             }
         }
     }

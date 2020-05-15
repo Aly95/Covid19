@@ -1,12 +1,15 @@
 package alyhuggan.covid_19.ui
 
 import alyhuggan.covid_19.R
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Environment
 import android.view.View
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import java.io.File
@@ -20,23 +23,28 @@ open class BaseFragment : Fragment() {
     fun setUpScreenshot() {
         //Sets up the sharebuttons onClickListener
         activity!!.findViewById<ImageView>(R.id.maintoolbar_share).setOnClickListener {
-            //Calls the screenshot function, passing it the rootView
-            val bitmap = screenshot(it.rootView)
-            val file = saveBitmap(bitmap, "screenshot.png")
-            //Retrieves URI as API24 and above will not allow access on file:// path
-            val apkURI = FileProvider.getUriForFile(
-                context!!,
-                context!!.applicationContext.packageName + ".provider",
-                file
-            )
 
-            //Creates a share intent, adds in the image and starts the intent
-            val shareIntent = Intent()
-            shareIntent.action = Intent.ACTION_SEND
-            shareIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
-            shareIntent.type = "image/*"
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(shareIntent, "share via"))
+            //Checking application has read and write permissions
+            if (checkPermissions()) {
+
+                //Calls the screenshot function, passing it the rootView
+                val bitmap = screenshot(it.rootView)
+                val file = saveBitmap(bitmap, "screenshot.png")
+                //Retrieves URI as API24 and above will not allow access on file:// path
+                val apkURI = FileProvider.getUriForFile(
+                    context!!,
+                    context!!.applicationContext.packageName + ".provider",
+                    file
+                )
+
+                //Creates a share intent, adds in the image and starts the intent
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_STREAM, apkURI)
+                shareIntent.type = "image/*"
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                startActivity(Intent.createChooser(shareIntent, "share via"))
+            }
         }
     }
 
@@ -69,5 +77,22 @@ open class BaseFragment : Fragment() {
         val canvas = Canvas(bitmap)
         view.draw(canvas)
         return bitmap
+    }
+
+    /*
+    Checks if application has read and write permissions
+     */
+    fun checkPermissions(): Boolean {
+
+        if (ActivityCompat.checkSelfPermission(
+                context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        } else {
+            return true
+        }
+        return false
     }
 }

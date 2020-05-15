@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Covid-19</string>
+    <string name="app_name">CovidCheck</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="total_stats_Text">Total Stats</string>
     <string name="region_stats_Text">Region Stats</string>
