@@ -6,18 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.covidmap.CovidMapFragment">
 
-
-        <ProgressBar
-            android:id="@+id/map_progressbar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+    <ProgressBar
+        android:id="@+id/map_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
@@ -25,6 +23,5 @@
         android:layout_height="match_parent"
         android:apiKey="AIzaSyD7-rhlgXcpSkZj8F9t6cdtmRNonSdBzhE"
         android:visibility="invisible" />
-
 
 </FrameLayout>

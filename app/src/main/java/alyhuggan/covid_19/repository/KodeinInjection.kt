@@ -12,8 +12,11 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
-class KodeinInjection: Application(), KodeinAware {
+class KodeinInjection : Application(), KodeinAware {
 
+    /*
+    Provides Kodein with the bindings in order to allow dependency injection
+    */
     override val kodein = Kodein.lazy {
         bind<Database>() with singleton { DatabaseImpl() }
         bind<StatsDao>() with singleton { instance<Database>().statsDao }
@@ -22,5 +25,5 @@ class KodeinInjection: Application(), KodeinAware {
                 instance()
             )
         }
-        }
     }
+}

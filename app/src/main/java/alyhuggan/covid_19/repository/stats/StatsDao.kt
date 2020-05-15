@@ -1,11 +1,12 @@
 package alyhuggan.covid_19.repository.stats
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 
 interface StatsDao {
 
-    fun getStats(): LiveData<List<Stats>>
+    /*
+    Interface for functions used in the StatsDaoImplementation (Stat Data Object Implementation) class
+     */
+    fun getStats(): LiveData<List<Stat>>
     fun getCountryStats(): LiveData<List<CountryStats>>
-
 }

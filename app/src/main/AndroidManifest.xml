@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MaterialDesign">
-
         <provider
            android:name=".ui.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -25,9 +24,7 @@
                 android:resource="@xml/provider_paths">
             </meta-data>
         </provider>
-
         <activity android:name=".ui.MainActivity">
-<!--            android:configChanges="orientation|screenSize|keyboardHidden">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -57,5 +57,4 @@
             tools:text="@string/stats_cases_Text" />
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

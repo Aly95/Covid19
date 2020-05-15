@@ -33,7 +33,8 @@
             android:padding="8dp"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp"
-            tools:text="@string/bottomsheet_toolbar_country_Text"></TextView>
+            tools:text="@string/bottomsheet_toolbar_country_Text">
+        </TextView>
 
         <ImageView
             android:id="@+id/bottomsheet_toolbar_exit"
@@ -41,7 +42,8 @@
             android:layout_height="match_parent"
             android:layout_margin="12dp"
             android:scaleType="fitEnd"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"></ImageView>
+            android:src="@android:drawable/ic_menu_close_clear_cancel">
+        </ImageView>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -64,22 +66,24 @@
 
             <include
                 android:id="@+id/sheet_total"
-                layout="@layout/items_bottomsheet"></include>
+                layout="@layout/items_bottomsheet">
+            </include>
 
             <include
                 android:id="@+id/sheet_confirmed"
-                layout="@layout/items_bottomsheet"></include>
+                layout="@layout/items_bottomsheet">
+            </include>
 
             <include
                 android:id="@+id/sheet_recovered"
-                layout="@layout/items_bottomsheet"></include>
+                layout="@layout/items_bottomsheet">
+            </include>
 
             <include
                 android:id="@+id/sheet_deaths"
-                layout="@layout/items_bottomsheet"></include>
+                layout="@layout/items_bottomsheet">
+            </include>
 
         </LinearLayout>
     </ScrollView>
-
-
 </LinearLayout>

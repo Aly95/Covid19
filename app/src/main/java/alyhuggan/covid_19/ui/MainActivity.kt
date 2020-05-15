@@ -5,32 +5,17 @@ import alyhuggan.covid_19.ui.covidmap.CovidMapFragment
 import alyhuggan.covid_19.ui.regionalstats.RegionStatsFragment
 import alyhuggan.covid_19.ui.totalstats.TotalStatsFragment
 import android.Manifest
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_covid_map.*
-import java.io.File
-import java.io.FileOutputStream
 
-
+/*
+Application requires read and write permissions for screenshot functionality
+ */
 private const val REQUEST_EXTERNAL_STORAGE = 1
 private val PERMISSIONS_STORAGE = arrayOf<String>(
     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -49,13 +34,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeUi(instance: Bundle?) {
 
+        //Opens Total Fragment if there is not saved instance
         if (instance == null) {
             changeFragment(TotalStatsFragment(), "total")
         }
 
-        /*
-        Retrieving bottom nav bar, setting onClickListener to listen for click events and swapping out fragments accordingly
-         */
+//        Retrieving bottom nav bar, setting onClickListener to listen for click events and swapping out fragments accordingly
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
 
@@ -75,26 +59,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*
-    Function to swap fragments with passed in fragment instance
+    Swaps out fragment with passed in fragment
      */
-//    private fun changeFragment(fragment: Fragment, name: String) {
-//
-//        val manager = supportFragmentManager
-//
-//        val transaction = manager.beginTransaction()
-//        transaction.replace(R.id.main_frame, fragment, name)
-//            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//            .commit()
-//    }
-
     private fun changeFragment(fragment: Fragment, name: String) {
 
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         val checkFragment: Fragment? = manager.findFragmentByTag(name)
-        
+
+        //Checks if the fragment already exists, swaps it out if so. If not fragment is added to backstack
         if(checkFragment != null) {
-            Log.d(TAG, "hello!")
             transaction.replace(R.id.main_frame, fragment, name)
                 .commit()
         } else {
@@ -106,5 +80,5 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
+//Class needed for screenshot functionality, see Android Manifest for provider details
 class FileProvider : FileProvider() {}

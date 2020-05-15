@@ -1,14 +1,13 @@
 package alyhuggan.covid_19.ui.totalstats
 
 import alyhuggan.covid_19.R
-import alyhuggan.covid_19.repository.stats.Stats
+import alyhuggan.covid_19.repository.stats.Stat
 import alyhuggan.covid_19.ui.BaseFragment
 import alyhuggan.covid_19.viewmodel.ViewModel
 import alyhuggan.covid_19.viewmodel.ViewModelFactory
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,25 +42,40 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Handling any presses of the back button
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d(TAG, "Handling back pressed")
                 activity?.finish()
             }
         })
         return inflater.inflate(R.layout.fragment_total_stats, container, false)
     }
 
+    /*
+    Function used to call setUpScreenshot from the Base Fragment class, call the initializeUI and activate the toolbar functions
+    */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setUpScreenshot()
         activateToolbar()
         initializeUi()
-        setUpScreenshot()
     }
 
+    /*
+    When fragment is resumed the bottom navigation is set to reflect the correct fragment
+    */
+    override fun onResume() {
+        super.onResume()
+        val bottomNavigation = activity!!.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
+        bottomNavigation.menu.getItem(0).isChecked = true
+    }
+
+    /*
+    Function to get stat LiveData from View Model then pass it to TotalStatsRecyclerViewAdapter to populate the page
+    */
     private fun initializeUi() {
 
-        val statList = ArrayList<Stats>()
+        val statList = ArrayList<Stat>()
 
         val viewModel = ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
@@ -71,34 +85,37 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
                 statList.add(stat)
             }
             if (!statList.isNullOrEmpty()) {
+                //Setting progressbar to gone once the data has been fetched
                 total_progressbar.visibility = View.GONE
+                //Updating RecyclerView and PieChart with the list of Stat objects
                 updateRecyclerView(statList)
                 updatePieChart(statList)
             }
         })
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-    }
-
+    /*
+    Toolbar text set to display the page title
+    */
     private fun activateToolbar() {
         val title: TextView = activity!!.findViewById(R.id.maintoolbar_title)
         title.text = getString(R.string.total_stats_Text)
     }
 
-    private fun updateRecyclerView(statList: ArrayList<Stats>) {
+    /*
+    Retrieves the recyclerview, sets the adapter to TotalStatsRecyclerViewAdapter and passes it the list of stats
+    */
+    private fun updateRecyclerView(statList: ArrayList<Stat>) {
         totalstats_recyclerview.layoutManager = LinearLayoutManager(context)
-        totalstats_recyclerview.adapter =
-            StatsRecyclerViewAdapter(
-                statList,
-                parentFragmentManager
-            )
+        totalstats_recyclerview.adapter = TotalStatsRecyclerViewAdapter(statList, parentFragmentManager)
         totalstats_recyclerview.setHasFixedSize(true)
+        //Added animation for a more fluid feeling
         animate()
     }
 
+    /*
+    Sets the recyclerviews animation
+     */
     private fun animate() {
         val resId = R.anim.animation_fall_down
         val animation: LayoutAnimationController =
@@ -106,17 +123,11 @@ class TotalStatsFragment : BaseFragment(), KodeinAware {
         totalstats_recyclerview.layoutAnimation = animation
     }
 
-    override fun onResume() {
-        super.onResume()
-        val bottomNavigation = activity!!.findViewById<BottomNavigationView>(R.id.bottom_nav_bar)
-        bottomNavigation.menu.getItem(0).isChecked = true
-    }
-
-    private fun updatePieChart(statList: ArrayList<Stats>) {
+    private fun updatePieChart(statList: ArrayList<Stat>) {
 
         val pieChart = view!!.findViewById<PieChart>(R.id.totalstats_piechart)
         val xValues = ArrayList<PieEntry>()
-        var stat: Stats
+        var stat: Stat
         var casesReplace: String
 
         val colors = ArrayList<Int>()

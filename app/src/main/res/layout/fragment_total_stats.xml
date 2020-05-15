@@ -34,7 +34,6 @@
 
     </LinearLayout>
 
-
     <ProgressBar
         android:id="@+id/total_progressbar"
         style="?android:attr/progressBarStyle"
